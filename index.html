@@ -246,7 +246,7 @@ body::before{
 .lucky-num {
   position: relative;
   z-index: 2;
-  margin-top: 0;        /* 将原先的 20% 改为 0，让 flex 布局完美居中它 */
+  margin-top: 20%;    
   font-family: 'Anton', sans-serif;
   font-size: 18px;
   color: var(--gold-bright);
@@ -1491,7 +1491,7 @@ function showRevealCard(box){
     overlay.classList.remove('show');
     isProcessing = false; // 揭晓卡片收起，解锁，允许点击下一个红包
     afterBoxOpened();
-  }, 5000);
+  }, 3500);
 }
 
 function afterBoxOpened(){
