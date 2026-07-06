@@ -379,7 +379,7 @@ body::before{
   color:#8f96bd;
 }
 .box.disabled{opacity:.35;pointer-events:none;filter:grayscale(.5);}
-.box.flip{animation:flipOpen .55s ease forwards;}
+.box.flip{animation:flipOpen .55s ease forwards;will-change:transform;}
 @keyframes flipOpen{
   0%{transform:rotateY(0);}
   50%{transform:rotateY(90deg);}
@@ -426,13 +426,15 @@ body::before{
 /* ---------- OVERLAYS ---------- */
 .overlay{
   position:fixed;inset:0;
-  background:rgba(2,3,10,0.86);
-  backdrop-filter:blur(3px);
+  background:rgba(2,3,10,0.93);
   display:none;
   align-items:center;justify-content:center;
   z-index:50;
   padding:20px;
+  contain:layout style paint;
 }
+/* 性能说明：backdrop-filter(毛玻璃模糊) 在中低端手机上会导致每帧重新采样背后像素，是弹窗卡顿的主因之一，
+   这里改用更高不透明度的纯色背景替代，视觉效果接近但不占用额外合成开销 */
 .overlay.show{display:flex;}
 
 /* 开场大幕 */
@@ -550,7 +552,7 @@ body::before{
   background:conic-gradient(from 0deg, var(--gold-bright), var(--red), var(--gold-deep), var(--red-deep), var(--gold-bright));
   z-index:-2;
   animation:spinGlow 2.6s linear infinite;
-  filter:blur(1px);
+  will-change:transform;
 }
 .reveal-card::after{
   content:'';
@@ -566,7 +568,7 @@ body::before{
 .reveal-rays{
   position:absolute;
   top:50%;left:50%;
-  width:520px;height:520px;
+  width:min(520px, 88vw);height:min(520px, 88vw);
   transform:translate(-50%,-50%);
   background:repeating-conic-gradient(rgba(255,224,102,0.16) 0deg 4deg, transparent 4deg 16deg);
   border-radius:50%;
@@ -575,7 +577,9 @@ body::before{
   pointer-events:none;
   mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
   -webkit-mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
+  will-change:transform;
 }
+/* 手机屏幕更窄，520px 的光芒层原本会大幅超出可视区域仍需栅格化，用 min() 按视口宽度收缩可显著降低绘制成本 */
 @keyframes raySpin{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
 
 /* 闪烁星光粒子 */
@@ -615,8 +619,10 @@ body::before{
   background-size:220% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 0 18px rgba(240,196,25,.55)) drop-shadow(0 4px 6px rgba(0,0,0,.5));
-  animation:amtShine 1.4s ease-in-out infinite, amtPop .4s cubic-bezier(.2,1.5,.4,1);
+  animation:amtShine 1.4s ease-in-out 3 both, amtPop .4s cubic-bezier(.2,1.5,.4,1);
 }
+/* amtShine 原本 infinite 循环，会在整张卡片展示期间持续重绘渐变文字背景（background-position 无法交给合成层处理）。
+   限制为播放 3 次后停止，视觉上金光扫过的效果依然明显，但大幅减少了红包揭晓时的持续重绘负担 */
 @keyframes amtShine{
   0%{background-position:220% 0;}
   100%{background-position:-20% 0;}
@@ -682,7 +688,7 @@ body::before{
   background:conic-gradient(from 0deg, var(--red), var(--gold-bright), var(--red-deep), var(--gold-deep), var(--red));
   z-index:-2;
   animation:spinGlow 2s linear infinite;
-  filter:blur(1px);
+  will-change:transform;
 }
 .call-card::after{
   content:'';
@@ -704,7 +710,7 @@ body::before{
 .call-rays{
   position:absolute;
   top:44%;left:50%;
-  width:420px;height:420px;
+  width:min(420px, 82vw);height:min(420px, 82vw);
   transform:translate(-50%,-50%);
   background:repeating-conic-gradient(rgba(255,120,100,0.16) 0deg 4deg, transparent 4deg 16deg);
   border-radius:50%;
@@ -713,6 +719,7 @@ body::before{
   pointer-events:none;
   mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
   -webkit-mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
+  will-change:transform;
 }
 .call-label{
   position:relative;z-index:2;
@@ -979,7 +986,7 @@ canvas#confetti{
   <div class="curtain right"><div class="curtain-gold-trim"></div></div>
   <div class="intro-content">
     <div class="zh-deco">红运临门</div>
-    <div class="eyebrow">FAMILY SPECIAL EDITION</div>
+    <div class="eyebrow">贺岁欢乐版 · 全家同乐</div>
     <h1>一掷千金</h1>
     <p>24 个红包 · 未知的命运 · 谁与银行家过招？</p>
     <button class="start-btn" id="btnStart">开始表演 ▶</button>
@@ -995,7 +1002,7 @@ canvas#confetti{
   </div>
 
   <div class="header-center">
-    <div class="eyebrow">DEAL OR NO DEAL</div>
+    <div class="eyebrow">红包对赌 · 一念千金</div>
     <h1>一掷千金</h1>
     <div class="sub">红运临门 · 惊喜专场</div>
     <div class="lucky-wrap" id="luckyWrap">
@@ -1036,7 +1043,7 @@ canvas#confetti{
 <div class="overlay ring-overlay" id="ringOverlay">
   <div class="call-card" id="callCard">
     <div class="call-rays" aria-hidden="true"></div>
-    <div class="call-label">INCOMING CALL</div>
+    <div class="call-label">来电提醒</div>
     <div class="phone-icon" aria-hidden="true">
       <span class="avatar-ring"></span>
       <span class="phone-wave phone-wave-1"></span>
@@ -1065,8 +1072,8 @@ canvas#confetti{
     <h2>银行家说：</h2>
     <div class="offer-amt" id="offerAmt">RM 0</div>
     <div class="offer-btns">
-      <button class="btn btn-nodeal" id="btnNoDeal">NO DEAL</button>
-      <button class="btn btn-deal" id="btnDeal">DEAL</button>
+      <button class="btn btn-nodeal" id="btnNoDeal">不成交</button>
+      <button class="btn btn-deal" id="btnDeal">成交</button>
     </div>
   </div>
 </div>
@@ -1425,7 +1432,7 @@ function revealBoxContents(box){
 
 function spawnRevealSparkles(container, intensity){
   container.innerHTML = '';
-  const count = 10 + Math.round(intensity*10); // 10~20 颗，越大奖越多
+  const count = isSmallScreen ? 8 + Math.round(intensity*6) : 10 + Math.round(intensity*10); // 手机端减少星光粒子数量（8~14），减轻DOM创建与动画负担
   for(let i=0;i<count;i++){
     const s = document.createElement('span');
     s.className = 'spark-star';
@@ -1678,7 +1685,7 @@ function endGame(dealAccepted, amount, revealInfo){
   setStatus(dealAccepted ? '已成交！' : '揭晓最终结果！', false);
 
   const overlay = document.getElementById('winOverlay');
-  document.getElementById('winTag').textContent = dealAccepted ? '恭喜成交 DEAL!' : '最终揭晓';
+  document.getElementById('winTag').textContent = dealAccepted ? '恭喜成交 🎉' : '最终揭晓';
   document.getElementById('winTitle').textContent = dealAccepted ? '银行家支付给你' : '你最终赢得';
   const amtEl = document.getElementById('winAmt');
   overlay.classList.add('show');
@@ -1730,7 +1737,10 @@ function resizeCanvas(){
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
+// 手机屏幕较窄、多为中低端GPU/CPU，彩纸粒子数量按屏幕宽度自适应缩减，减少每帧绘制量
+const isSmallScreen = window.matchMedia('(max-width:600px)').matches;
 function launchConfetti(count = 160, lifespan = 6000, originY = null){
+  if(isSmallScreen) count = Math.round(count * 0.55);
   const colors = ['#f0c419','#e63c33','#ffe066','#ffffff','#c99a12'];
   confettiParticles = [];
   for(let i=0;i<count;i++){
