@@ -100,31 +100,41 @@ body::before{
   border-radius:10px;
   padding:4px 3px 3px;
 }
-.ladder-currency{
-  text-align:center;
-  font-family:'Anton','Noto Sans SC',sans-serif;
-  font-size:8px;
-  letter-spacing:1.5px;
-  color:var(--gold-bright);
-  opacity:.85;
-}
 .ladder-cols{display:flex;flex-direction:row;gap:3px;}
 .ladder-col{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
 .ladder-item{
   display:flex;
-  align-items:center;
+  align-items:baseline;
   justify-content:center;
+  gap:2px;
   font-family:'Anton','Noto Sans SC',sans-serif;
-  font-size:8.5px;
-  letter-spacing:.2px;
-  padding:2.5px 1px;
+  font-size:clamp(10px,3vw,13px);
+  letter-spacing:.1px;
+  padding:3.5px 2px;
   border-radius:5px;
   background:linear-gradient(155deg, #ffe066 0%, #f0c419 45%, #b5860f 100%);
   border:1px solid rgba(255,224,102,0.6);
   color:#3a2405;
   font-weight:700;
+  -webkit-text-stroke:0.3px #fff;
+  text-shadow:
+    0 0 1px #fff,
+    0.5px 0 0 #fff, -0.5px 0 0 #fff,
+    0 0.5px 0 #fff, 0 -0.5px 0 #fff;
   box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 0 5px rgba(240,196,25,0.3);
   transition:all .4s ease;
+}
+.ladder-item .li-cur{
+  font-size:.62em;
+  letter-spacing:0;
+  opacity:.72;
+  font-weight:700;
+  transform:translateY(-.5px);
+}
+.ladder-item .li-num{
+  font-variant-numeric: tabular-nums;
+  font-size:1em;
+  white-space:nowrap;
 }
 .ladder-item.crossed{
   color:var(--crossed);
@@ -134,7 +144,10 @@ body::before{
   box-shadow:none;
   opacity:.6;
   transform:scale(.94);
+  -webkit-text-stroke:0;
+  text-shadow:none;
 }
+.ladder-item.crossed .li-cur{ opacity:.5; }
 
 .header-center{
   flex:1;
@@ -282,6 +295,8 @@ body::before{
 }
 @media (min-width:520px){
   .grid{ max-width:560px; gap:14px; }
+  .ladder-side{ max-width:190px; }
+  .ladder-item{ font-size:13px; padding:4px 2px; }
 }
 
 /* 红包造型信封 */
@@ -441,8 +456,17 @@ body::before{
   position:relative;z-index:2;
   text-align:center;
   color:var(--ink);
-  padding:0 20px;
+  padding:24px 20px;
   transition:opacity .28s ease, transform .28s ease;
+}
+.intro-content::before{
+  content:'';
+  position:absolute;
+  inset:-10% -6%;
+  background:radial-gradient(ellipse at center, rgba(10,2,1,0.6) 0%, rgba(10,2,1,0.32) 45%, transparent 75%);
+  z-index:-1;
+  border-radius:50%;
+  pointer-events:none;
 }
 #introOverlay.opening .intro-content{
   opacity:0;
@@ -458,12 +482,18 @@ body::before{
   margin:8px 0 4px;
   background:linear-gradient(180deg,var(--gold-bright),var(--gold-deep));
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  text-shadow:0 0 36px rgba(240,196,25,.5);
+  filter:
+    drop-shadow(0 2px 3px rgba(0,0,0,.7))
+    drop-shadow(0 0 10px rgba(0,0,0,.6))
+    drop-shadow(0 0 26px rgba(240,196,25,.4));
 }
 .intro-content .zh-deco{
   font-family:'Ma Shan Zheng', cursive;
   font-size:36px;color:var(--gold-bright);
-  opacity:.9;margin-bottom:8px;
+  opacity:.95;margin-bottom:8px;
+  text-shadow:
+    0 2px 3px rgba(0,0,0,.6),
+    0 0 12px rgba(0,0,0,.5);
 }
 .intro-content p{color:var(--ink-dim);font-size:14px;margin:8px 0 24px;}
 .start-btn{
@@ -484,39 +514,225 @@ body::before{
 
 /* reveal card */
 .reveal-card{
+  position:relative;
+  isolation:isolate;
+  overflow:visible;
   background:linear-gradient(165deg,#1a2350,#0b1030);
-  border:1px solid var(--panel-line);
-  border-radius:18px;
-  padding:24px 22px;
+  border:none;
+  border-radius:22px;
+  padding:30px 26px 26px;
   text-align:center;
-  max-width:280px;
+  max-width:300px;
   width:100%;
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
-  animation:popIn .35s cubic-bezier(.2,1.4,.4,1);
+  box-shadow:0 20px 70px rgba(0,0,0,.65);
+  animation:popIn .45s cubic-bezier(.2,1.4,.4,1);
 }
 @keyframes popIn{
-  0%{transform:scale(.7);opacity:0;}
-  100%{transform:scale(1);opacity:1;}
+  0%{transform:scale(.55) rotate(-6deg);opacity:0;}
+  60%{transform:scale(1.08) rotate(2deg);}
+  100%{transform:scale(1) rotate(0deg);opacity:1;}
 }
-.reveal-card .tag{font-size:12px;color:var(--ink-dim);letter-spacing:3px;}
-.reveal-card .amt{
-  font-family:'Anton',sans-serif;
-  font-size:38px;
-  margin:8px 0;
+/* 旋转渐变光环边框 */
+.reveal-card::before{
+  content:'';
+  position:absolute;
+  inset:-3px;
+  border-radius:24px;
+  background:conic-gradient(from 0deg, var(--gold-bright), var(--red), var(--gold-deep), var(--red-deep), var(--gold-bright));
+  z-index:-2;
+  animation:spinGlow 2.6s linear infinite;
+  filter:blur(1px);
+}
+.reveal-card::after{
+  content:'';
+  position:absolute;
+  inset:2.5px;
+  border-radius:20px;
+  background:linear-gradient(165deg,#1a2350,#0b1030);
+  z-index:-1;
+}
+@keyframes spinGlow{ to{ transform:rotate(360deg); } }
+
+/* 背后放射光芒 */
+.reveal-rays{
+  position:absolute;
+  top:50%;left:50%;
+  width:520px;height:520px;
+  transform:translate(-50%,-50%);
+  background:repeating-conic-gradient(rgba(255,224,102,0.16) 0deg 4deg, transparent 4deg 16deg);
+  border-radius:50%;
+  z-index:-3;
+  animation:raySpin 9s linear infinite;
+  pointer-events:none;
+  mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
+  -webkit-mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
+}
+@keyframes raySpin{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+
+/* 闪烁星光粒子 */
+.reveal-sparkles{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:3;
+  overflow:visible;
+}
+.spark-star{
+  position:absolute;
+  font-size:var(--sz,14px);
   color:var(--gold-bright);
-  text-shadow:0 0 18px rgba(240,196,25,.4);
+  text-shadow:0 0 6px rgba(255,224,102,.9);
+  opacity:0;
+  animation:sparkPop var(--dur,.9s) ease-out forwards;
+  animation-delay:var(--delay,0s);
+}
+@keyframes sparkPop{
+  0%{opacity:0;transform:scale(0) rotate(0deg);}
+  35%{opacity:1;transform:scale(1.15) rotate(80deg);}
+  100%{opacity:0;transform:scale(.5) rotate(160deg) translateY(-14px);}
+}
+
+.reveal-card .tag{
+  position:relative;z-index:2;
+  font-size:12px;color:var(--ink-dim);letter-spacing:3px;
+}
+.reveal-card .amt{
+  position:relative;z-index:2;
+  font-family:'Anton',sans-serif;
+  font-size:44px;
+  margin:10px 0 2px;
+  letter-spacing:1px;
+  background:linear-gradient(100deg, var(--gold-deep) 0%, var(--gold-bright) 25%, #fff 50%, var(--gold-bright) 75%, var(--gold-deep) 100%);
+  background-size:220% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 18px rgba(240,196,25,.55)) drop-shadow(0 4px 6px rgba(0,0,0,.5));
+  animation:amtShine 1.4s ease-in-out infinite, amtPop .4s cubic-bezier(.2,1.5,.4,1);
+}
+@keyframes amtShine{
+  0%{background-position:220% 0;}
+  100%{background-position:-20% 0;}
+}
+@keyframes amtPop{
+  0%{transform:scale(.5);}
+  60%{transform:scale(1.15);}
+  100%{transform:scale(1);}
+}
+.reveal-tier-badge{
+  position:relative;z-index:2;
+  display:inline-block;
+  font-family:'Anton',sans-serif;
+  font-size:15px;
+  letter-spacing:3px;
+  padding:4px 16px;
+  margin-bottom:8px;
+  border-radius:999px;
+  color:#2a0704;
+  background:linear-gradient(160deg,var(--gold-bright),var(--red));
+  box-shadow:0 0 22px rgba(230,60,51,.6), 0 0 10px rgba(240,196,25,.6);
+  animation:badgeShake .5s ease-in-out infinite;
+}
+@keyframes badgeShake{
+  0%,100%{transform:rotate(-2deg) scale(1);}
+  50%{transform:rotate(2deg) scale(1.05);}
+}
+.reveal-flash{
+  position:fixed;inset:0;
+  background:radial-gradient(circle, rgba(255,224,102,.9), rgba(240,196,25,.15) 60%, transparent 80%);
+  opacity:0;
+  z-index:52;
+  pointer-events:none;
+}
+.reveal-flash.flash-once{
+  animation:revealFlashPulse .5s ease-out;
+}
+@keyframes revealFlashPulse{
+  0%{opacity:0;}
+  15%{opacity:.85;}
+  100%{opacity:0;}
 }
 
 /* phone ring overlay */
 .ring-overlay{background:rgba(60,4,4,0.92);}
+.call-card{
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  max-width:280px;
+  padding:26px 20px 22px;
+  border-radius:22px;
+  text-align:center;
+  background:linear-gradient(165deg,#2a0a08,#0c0402);
+  box-shadow:0 20px 70px rgba(0,0,0,.65);
+  animation:popIn .45s cubic-bezier(.2,1.4,.4,1), callShake 2.4s ease-in-out infinite;
+}
+.call-card::before{
+  content:'';
+  position:absolute;
+  inset:-3px;
+  border-radius:24px;
+  background:conic-gradient(from 0deg, var(--red), var(--gold-bright), var(--red-deep), var(--gold-deep), var(--red));
+  z-index:-2;
+  animation:spinGlow 2s linear infinite;
+  filter:blur(1px);
+}
+.call-card::after{
+  content:'';
+  position:absolute;
+  inset:2.5px;
+  border-radius:20px;
+  background:linear-gradient(165deg,#2a0a08,#0c0402);
+  z-index:-1;
+}
+@keyframes callShake{
+  0%,92%,100%{transform:translateX(0);}
+  93%{transform:translateX(-3px);}
+  94%{transform:translateX(3px);}
+  95%{transform:translateX(-3px);}
+  96%{transform:translateX(3px);}
+  97%{transform:translateX(-2px);}
+  98%{transform:translateX(2px);}
+}
+.call-rays{
+  position:absolute;
+  top:44%;left:50%;
+  width:420px;height:420px;
+  transform:translate(-50%,-50%);
+  background:repeating-conic-gradient(rgba(255,120,100,0.16) 0deg 4deg, transparent 4deg 16deg);
+  border-radius:50%;
+  z-index:-3;
+  animation:raySpin 7s linear infinite;
+  pointer-events:none;
+  mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
+  -webkit-mask-image:radial-gradient(circle, rgba(0,0,0,1) 30%, transparent 72%);
+}
+.call-label{
+  position:relative;z-index:2;
+  display:inline-block;
+  font-size:10px;
+  letter-spacing:4px;
+  color:var(--gold-bright);
+  opacity:.8;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
 .ring-overlay .phone-icon{
   position:relative;
-  width:76px;height:76px;
-  margin:0 auto;
+  z-index:2;
+  width:84px;height:84px;
+  margin:4px auto 10px;
   display:flex;
   align-items:center;justify-content:center;
   border-radius:50%;
-  background:radial-gradient(circle, rgba(240,196,25,.22), transparent 70%);
+  background:radial-gradient(circle, rgba(240,196,25,.25), transparent 70%);
+}
+.ring-overlay .avatar-ring{
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  background:conic-gradient(from 0deg, var(--gold-bright), var(--red), transparent 60%, var(--gold-bright));
+  animation:spinGlow 1.8s linear infinite;
+  -webkit-mask:radial-gradient(circle, transparent 68%, #000 71%);
+  mask:radial-gradient(circle, transparent 68%, #000 71%);
 }
 .ring-overlay .phone-svg{
   position:relative;
@@ -534,6 +750,7 @@ body::before{
   animation:phoneWave 1.6s ease-out infinite;
 }
 .ring-overlay .phone-wave-2{ animation-delay:.5s; }
+.ring-overlay .phone-wave-3{ animation-delay:1s; border-color:rgba(230,60,51,.5); }
 @keyframes phoneWave{
   0%{ transform:scale(.6); opacity:.65; }
   70%{ opacity:.15; }
@@ -544,25 +761,63 @@ body::before{
   25%{transform:rotate(-14deg);}
   75%{transform:rotate(14deg);}
 }
+.caller-name{
+  position:relative;z-index:2;
+  font-family:'Anton','Noto Sans SC',sans-serif;
+  font-size:19px;
+  letter-spacing:2px;
+  color:var(--ink);
+  margin-bottom:2px;
+}
 .ring-overlay .ring-text{
+  position:relative;z-index:2;
   font-family:'Anton',sans-serif;
-  font-size:20px;
-  letter-spacing:3px;
+  font-size:15px;
+  letter-spacing:2px;
   color:#ffdcd6;
-  margin-top:16px;
+  margin-top:4px;
   text-align:center;
   animation:blink 0.9s steps(2) infinite;
 }
 @keyframes blink{50%{opacity:.2;}}
+.signal-bars{
+  position:relative;z-index:2;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:3px;
+  height:16px;
+  margin-top:14px;
+}
+.signal-bars span{
+  display:block;
+  width:4px;
+  border-radius:2px;
+  background:linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
+  animation:signalBounce 1s ease-in-out infinite;
+}
+.signal-bars span:nth-child(1){ height:6px; animation-delay:0s; }
+.signal-bars span:nth-child(2){ height:10px; animation-delay:.12s; }
+.signal-bars span:nth-child(3){ height:16px; animation-delay:.24s; }
+.signal-bars span:nth-child(4){ height:10px; animation-delay:.36s; }
+.signal-bars span:nth-child(5){ height:6px; animation-delay:.48s; }
+@keyframes signalBounce{
+  0%,100%{ transform:scaleY(.4); opacity:.55; }
+  50%{ transform:scaleY(1); opacity:1; }
+}
+.call-card.connected .phone-svg{ animation:none; }
+.call-card.connected .call-label{ color:var(--gold-bright); opacity:1; }
+.call-card.connected .call-label::after{ content:' • 已接通'; }
+.call-card.connected .signal-bars span{ animation-duration:.5s; }
 .ring-flash{
   position:fixed;inset:0;
-  background:var(--red);
+  background:radial-gradient(circle, rgba(255,120,100,.55), rgba(230,60,51,.12) 55%, transparent 78%);
   opacity:0;
   z-index:49;
   pointer-events:none;
 }
-.ring-flash.flashing{animation:flashScreen .5s steps(2) infinite;}
-@keyframes flashScreen{0%,100%{opacity:0;}50%{opacity:.18;}}
+.ring-flash.flashing{animation:flashScreen .9s ease-out infinite;}
+@keyframes flashScreen{0%,100%{opacity:0;}20%{opacity:.9;}100%{opacity:0;}}
 
 /* banker offer modal */
 .offer-card{
@@ -668,6 +923,29 @@ body::before{
   text-shadow:0 0 30px rgba(240,196,25,.6);
   margin:10px 0 16px;
 }
+.win-reveal{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background:rgba(240,196,25,.08);
+  border:1px solid rgba(240,196,25,.35);
+  border-radius:12px;
+  padding:10px 14px;
+  margin:0 0 16px;
+}
+.win-reveal-label{
+  font-size:12.5px;
+  color:var(--ink-dim);
+  letter-spacing:.3px;
+  text-align:left;
+}
+.win-reveal-amt{
+  font-family:'Anton',sans-serif;
+  font-size:18px;
+  color:var(--gold-bright);
+  white-space:nowrap;
+}
 .winner-card .btn{width:100%;}
 
 canvas#confetti{
@@ -683,6 +961,7 @@ canvas#confetti{
 
 <div class="ambient" id="ambient"></div>
 <div class="ring-flash" id="ringFlash"></div>
+<div class="reveal-flash" id="revealFlash"></div>
 <canvas id="confetti"></canvas>
 
 <!-- 开场大幕 -->
@@ -700,7 +979,6 @@ canvas#confetti{
 
 <div class="top-row">
   <div class="ladder-side" id="ladderLeftSide">
-    <div class="ladder-currency">RM</div>
     <div class="ladder-cols">
       <div class="ladder-col" id="ladderCol1"></div>
       <div class="ladder-col" id="ladderCol2"></div>
@@ -718,7 +996,6 @@ canvas#confetti{
   </div>
 
   <div class="ladder-side" id="ladderRightSide">
-    <div class="ladder-currency">RM</div>
     <div class="ladder-cols">
       <div class="ladder-col" id="ladderCol3"></div>
       <div class="ladder-col" id="ladderCol4"></div>
@@ -737,7 +1014,10 @@ canvas#confetti{
 
 <!-- 开箱结果小卡片 -->
 <div class="overlay" id="revealOverlay">
-  <div class="reveal-card">
+  <div class="reveal-card" id="revealCard">
+    <div class="reveal-rays" aria-hidden="true"></div>
+    <div class="reveal-sparkles" id="revealSparkles" aria-hidden="true"></div>
+    <div class="reveal-tier-badge" id="revealBadge" style="display:none;">大奖 JACKPOT 🧧</div>
     <div class="tag">红包 <span id="revealNum"></span> 号 揭晓</div>
     <div class="amt" id="revealAmt"></div>
   </div>
@@ -745,10 +1025,14 @@ canvas#confetti{
 
 <!-- 银行家来电 -->
 <div class="overlay ring-overlay" id="ringOverlay">
-  <div style="text-align:center;">
+  <div class="call-card" id="callCard">
+    <div class="call-rays" aria-hidden="true"></div>
+    <div class="call-label">INCOMING CALL</div>
     <div class="phone-icon" aria-hidden="true">
+      <span class="avatar-ring"></span>
       <span class="phone-wave phone-wave-1"></span>
       <span class="phone-wave phone-wave-2"></span>
+      <span class="phone-wave phone-wave-3"></span>
       <svg class="phone-svg" viewBox="0 0 24 24">
         <defs>
           <linearGradient id="phoneIconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -759,7 +1043,9 @@ canvas#confetti{
         <path fill="url(#phoneIconGrad)" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
       </svg>
     </div>
+    <div class="caller-name">神秘银行家</div>
     <div class="ring-text" id="ringText">银行家来电中...</div>
+    <div class="signal-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
   </div>
 </div>
 
@@ -794,6 +1080,10 @@ canvas#confetti{
     <div class="eyebrow" id="winTag">恭喜成交</div>
     <h2 id="winTitle">你赢得了</h2>
     <div class="final-amt" id="winAmt">RM 0</div>
+    <div class="win-reveal" id="winReveal" style="display:none;">
+      <span class="win-reveal-label" id="winRevealLabel"></span>
+      <span class="win-reveal-amt" id="winRevealAmt"></span>
+    </div>
     <button class="btn btn-deal" id="btnRestart">再玩一次</button>
   </div>
 </div>
@@ -1022,7 +1312,7 @@ function renderLadder(){
       const d = document.createElement('div');
       d.className = 'ladder-item';
       d.dataset.value = v;
-      d.textContent = fmtShort(v);
+      d.innerHTML = `<span class="li-cur">${CONFIG.currency}</span><span class="li-num">${fmtShort(v)}</span>`;
       el.appendChild(d);
     });
   });
@@ -1111,17 +1401,90 @@ function openBox(box){
   }, 280);
 }
 
+function revealBoxContents(box){
+  if(!box) return;
+  const el = getBoxEl(box.id);
+  if(!el) return;
+  el.classList.remove('picked-lucky');
+  el.classList.add('flip');
+  setTimeout(()=>{
+    box.opened = true;
+    el.classList.add('opened');
+    el.innerHTML = `<span class="prize-val">${fmt(box.prize)}</span>`;
+  }, 280);
+}
+
+function spawnRevealSparkles(container, intensity){
+  container.innerHTML = '';
+  const count = 10 + Math.round(intensity*10); // 10~20 颗，越大奖越多
+  for(let i=0;i<count;i++){
+    const s = document.createElement('span');
+    s.className = 'spark-star';
+    s.textContent = Math.random()>0.5 ? '✦' : '✧';
+    const angle = Math.random()*360;
+    const dist = 60 + Math.random()*90;
+    const x = 50 + Math.cos(angle*Math.PI/180)*dist*0.45;
+    const y = 50 + Math.sin(angle*Math.PI/180)*dist*0.45;
+    s.style.left = x+'%';
+    s.style.top = y+'%';
+    s.style.setProperty('--sz', (11+Math.random()*12)+'px');
+    s.style.setProperty('--dur', (.7+Math.random()*.6)+'s');
+    s.style.setProperty('--delay', (Math.random()*.35)+'s');
+    container.appendChild(s);
+  }
+}
+
+function animateCountUp(el, target, duration){
+  const start = performance.now();
+  function step(now){
+    const t = Math.min(1, (now-start)/duration);
+    const eased = 1 - Math.pow(1-t, 3); // ease-out cubic
+    const current = target*eased;
+    el.textContent = fmt(Number.isInteger(target) ? Math.round(current) : current);
+    if(t < 1){
+      requestAnimationFrame(step);
+    } else {
+      el.textContent = fmt(target);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
 function showRevealCard(box){
   const overlay = document.getElementById('revealOverlay');
+  const card = document.getElementById('revealCard');
+  const badge = document.getElementById('revealBadge');
+  const sparkles = document.getElementById('revealSparkles');
+  const flash = document.getElementById('revealFlash');
+
   document.getElementById('revealNum').textContent = box.id;
-  document.getElementById('revealAmt').textContent = fmt(box.prize);
+
+  // 大奖强度：相对最高奖金 1000 的占比，决定特效华丽程度
+  const maxPrize = Math.max(...CONFIG.prizes);
+  const intensity = Math.min(1, box.prize / maxPrize);
+  const isJackpot = box.prize >= maxPrize * 0.5;
+
+  badge.style.display = isJackpot ? 'inline-block' : 'none';
+
+  document.getElementById('revealAmt').textContent = fmt(0);
+  animateCountUp(document.getElementById('revealAmt'), box.prize, 650);
+
+  spawnRevealSparkles(sparkles, intensity);
+
   overlay.classList.add('show');
+
+  flash.classList.remove('flash-once');
+  void flash.offsetWidth;
+  flash.classList.add('flash-once');
+
+  vibrate(isJackpot ? [40,30,40,30,120] : [25]);
+  launchConfetti(isJackpot ? 90 : 40, 1400, window.innerHeight*0.35);
 
   setTimeout(()=>{
     overlay.classList.remove('show');
     isProcessing = false; // 揭晓卡片收起，解锁，允许点击下一个红包
     afterBoxOpened();
-  }, 1100);
+  }, 1300);
 }
 
 function afterBoxOpened(){
@@ -1164,9 +1527,12 @@ function showPhoneRing(callback){
   const texts = ['银行家来电中...', '电话接通了...', '银行家正在思考...'];
   let i=0;
   const textEl = document.getElementById('ringText');
+  const callCard = document.getElementById('callCard');
+  callCard.classList.remove('connected');
   const interval = setInterval(()=>{
     i = (i+1) % texts.length;
     textEl.textContent = texts[i];
+    callCard.classList.toggle('connected', i>0);
   }, 700);
 
   setTimeout(()=>{
@@ -1192,7 +1558,15 @@ function showOfferModal(roundIdx, amount){
     overlay.classList.remove('show');
     cleanup();
     sfxDeal();
-    endGame(true, amount, roundLabel(roundIdx));
+    const luckyBox = boxes.find(b=>b.id===luckyBoxId);
+    let revealInfo = null;
+    if(luckyBox){
+      revealBoxContents(luckyBox);
+      revealInfo = { label: '你原本选中的幸运红包是', prize: luckyBox.prize };
+    }
+    setTimeout(()=>{
+      endGame(true, amount, revealInfo);
+    }, 500);
   };
   const noDealHandler = ()=>{
     overlay.classList.remove('show');
@@ -1256,7 +1630,7 @@ function showFinaleChoice(){
     overlay.classList.remove('show');
     cleanup();
     const lastBox = boxes.find(b=>!b.opened && b.id!==luckyBoxId);
-    finalizeGame(lastBox.id);
+    finalizeGame(lastBox.id, luckyBoxId, '你放弃的幸运红包原本是');
   };
   function cleanup(){
     btnKeep.removeEventListener('click', keepHandler);
@@ -1266,7 +1640,7 @@ function showFinaleChoice(){
   btnSwap.addEventListener('click', swapHandler);
 }
 
-function finalizeGame(boxId){
+function finalizeGame(boxId, extraBoxId, extraLabel){
   const box = boxes.find(b=>b.id===boxId);
   const el = getBoxEl(boxId);
   if(el){
@@ -1274,13 +1648,23 @@ function finalizeGame(boxId){
     el.classList.add('flip');
   }
   sfxOpen();
+
+  let revealInfo = null;
+  if(extraBoxId){
+    const extraBox = boxes.find(b=>b.id===extraBoxId);
+    if(extraBox){
+      revealBoxContents(extraBox);
+      revealInfo = { label: extraLabel, prize: extraBox.prize };
+    }
+  }
+
   setTimeout(()=>{
-    endGame(false, box.prize, '你的最终红包');
+    endGame(false, box.prize, revealInfo);
   }, 500);
 }
 
 /* ============ 结算 ============ */
-function endGame(dealAccepted, amount){
+function endGame(dealAccepted, amount, revealInfo){
   gameEnded = true;
   setStatus(dealAccepted ? '已成交！' : '揭晓最终结果！', false);
 
@@ -1290,6 +1674,15 @@ function endGame(dealAccepted, amount){
   const amtEl = document.getElementById('winAmt');
   overlay.classList.add('show');
   countUpTo(amtEl, amount, 1200);
+
+  const revealEl = document.getElementById('winReveal');
+  if(revealInfo){
+    document.getElementById('winRevealLabel').textContent = revealInfo.label;
+    document.getElementById('winRevealAmt').textContent = fmt(revealInfo.prize);
+    revealEl.style.display = 'flex';
+  } else {
+    revealEl.style.display = 'none';
+  }
 
   launchConfetti();
   sfxFirework();
@@ -1328,14 +1721,13 @@ function resizeCanvas(){
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-function launchConfetti(){
+function launchConfetti(count = 160, lifespan = 6000, originY = null){
   const colors = ['#f0c419','#e63c33','#ffe066','#ffffff','#c99a12'];
   confettiParticles = [];
-  const count = 160;
   for(let i=0;i<count;i++){
     confettiParticles.push({
       x: Math.random()*confettiCanvas.width,
-      y: -20 - Math.random()*confettiCanvas.height*0.5,
+      y: originY!==null ? originY + (Math.random()-0.5)*40 : -20 - Math.random()*confettiCanvas.height*0.5,
       w: 6+Math.random()*6,
       h: 8+Math.random()*10,
       color: colors[Math.floor(Math.random()*colors.length)],
@@ -1361,7 +1753,7 @@ function launchConfetti(){
       ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
       ctx.restore();
     });
-    if(stillAlive && now-startTime < 6000){
+    if(stillAlive && now-startTime < lifespan){
       confettiAnimId = requestAnimationFrame(frame);
     } else {
       ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
