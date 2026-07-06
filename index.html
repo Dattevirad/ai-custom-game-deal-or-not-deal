@@ -102,50 +102,52 @@ body::before{
 }
 .ladder-cols{display:flex;flex-direction:row;gap:3px;}
 .ladder-col{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
-.ladder-item{
-  display:flex;
-  align-items:baseline;
-  justify-content:center;
-  gap:2px;
-  font-family:'Anton','Noto Sans SC',sans-serif;
-  font-size:clamp(10px,3vw,13px);
-  letter-spacing:.1px;
-  padding:3.5px 2px;
-  border-radius:5px;
-  background:linear-gradient(155deg, #ffe066 0%, #f0c419 45%, #b5860f 100%);
-  border:1px solid rgba(255,224,102,0.6);
-  color:#3a2405;
-  font-weight:700;
-  -webkit-text-stroke:0.3px #fff;
-  text-shadow:
-    0 0 1px #fff,
-    0.5px 0 0 #fff, -0.5px 0 0 #fff,
-    0 0.5px 0 #fff, 0 -0.5px 0 #fff;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 0 5px rgba(240,196,25,0.3);
-  transition:all .4s ease;
+/* 1. 锁定盒子高度，取消动态字体限制 */
+.ladder-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 27px;              /* 锁定固定高度，防止被撑开 */
+  padding: 0 4px;            /* 调整内边距，让内容居中 */
+  border-radius: 5px;
+  /* 下面保留你原本的背景和视觉属性 */
+  background: linear-gradient(155deg, #ffe066 0%, #f0c419 45%, #b5860f 100%);
+  border: 1px solid rgba(255,224,102,0.6);
+  color: #3a2405;
+  font-weight: 700;
+  -webkit-text-stroke: 0.3px #fff;
+  text-shadow: 0 0 1px #fff, 0.5px 0 0 #fff, -0.5px 0 0 #fff, 0 0.5px 0 #fff, 0 -0.5px 0 #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 0 5px rgba(240,196,25,0.3);
+  transition: all .4s ease;
 }
-.ladder-item .li-cur{
-  font-size:.62em;
-  letter-spacing:0;
-  opacity:.72;
-  font-weight:700;
-  transform:translateY(-.5px);
+
+/* 2. 修改单位 (RM) 的大小 */
+.ladder-item .li-cur {
+  font-size: 10px;           /* 稍微放大一点 */
+  letter-spacing: 0;
+  opacity: .72;
+  font-weight: 700;
 }
-.ladder-item .li-num{
+
+/* 3. 修改数字的大小 (重点) */
+.ladder-item .li-num {
   font-variant-numeric: tabular-nums;
-  font-size:1em;
-  white-space:nowrap;
+  font-size: 15px;           /* 这里是你想要的放大效果，可以改成 14px 或 16px */
+  white-space: nowrap;
 }
-.ladder-item.crossed{
-  color:var(--crossed);
-  text-decoration:line-through;
-  background:rgba(0,0,0,0.3);
-  border-color:rgba(255,255,255,0.04);
-  box-shadow:none;
-  opacity:.6;
-  transform:scale(.94);
-  -webkit-text-stroke:0;
-  text-shadow:none;
+
+/* 4. 保持原来变灰的样式逻辑不变 */
+.ladder-item.crossed {
+  color: var(--crossed);
+  text-decoration: line-through;
+  background: rgba(0,0,0,0.3);
+  border-color: rgba(255,255,255,0.04);
+  box-shadow: none;
+  opacity: .6;
+  transform: scale(.94);
+  -webkit-text-stroke: 0;
+  text-shadow: none;
 }
 .ladder-item.crossed .li-cur{ opacity:.5; }
 
