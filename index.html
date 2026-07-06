@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>一掷千金 · 红运临门</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+SC:wght@400;500;700;900&family=Ma+Shan+Zheng&display=swap');
+
+:root{
+  --bg-deep:#1a0503;
+  --bg-navy:#2c0a08;
+  --gold:#f0c419;
+  --gold-deep:#c99a12;
+  --gold-bright:#ffe066;
+  --red:#e63c33;
+  --red-deep:#7c1a13;
+  --envelope:#c3271f;
+  --envelope-dark:#7a140f;
+  --ink:#f8ecd8;
+  --ink-dim:#d9ab93;
+  --panel:rgba(255,205,120,0.055);
+  --panel-line:rgba(240,196,25,0.3);
+  --crossed:#6b4a42;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;width:100%;overflow-x:hidden;height:100%;}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 18% -8%, #6a1a10 0%, transparent 45%),
+    radial-gradient(ellipse at 88% 2%, #7a2410 0%, transparent 42%),
+    radial-gradient(ellipse at 50% 108%, #3d0e08 0%, transparent 55%),
+    linear-gradient(180deg,var(--bg-deep) 0%,var(--bg-navy) 45%,var(--bg-deep) 100%);
+  color:var(--ink);
+  font-family:'Noto Sans SC', sans-serif;
+  display:flex;
+  flex-direction:column;
+  height:100dvh;
+  overflow:hidden;
+  position:relative;
+}
+/* 喜庆纹样：散落金色光点，营造招财喜气氛围 */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(240,196,25,0.07) 0, transparent 2.5%),
+    radial-gradient(circle at 62% 8%, rgba(240,196,25,0.06) 0, transparent 2.5%),
+    radial-gradient(circle at 85% 35%, rgba(240,196,25,0.06) 0, transparent 2.5%),
+    radial-gradient(circle at 30% 55%, rgba(240,196,25,0.05) 0, transparent 2.5%),
+    radial-gradient(circle at 75% 70%, rgba(240,196,25,0.06) 0, transparent 2.5%),
+    radial-gradient(circle at 15% 88%, rgba(240,196,25,0.05) 0, transparent 2.5%),
+    radial-gradient(circle at 92% 92%, rgba(240,196,25,0.05) 0, transparent 2.5%);
+  background-size:260px 260px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ---------- 环境浮光粒子 ---------- */
+.ambient{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.spark{
+  position:absolute;
+  bottom:-10px;
+  width:4px;height:4px;
+  border-radius:50%;
+  background:radial-gradient(circle, var(--gold-bright), transparent 70%);
+  opacity:0;
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0) translateX(0);opacity:0;}
+  10%{opacity:.8;}
+  90%{opacity:.4;}
+  100%{transform:translateY(-110vh) translateX(var(--drift,20px));opacity:0;}
+}
+
+
+
+/* ---------- 顶部三栏：左奖金榜 / 标题 / 右奖金榜 ---------- */
+.top-row{
+  display:flex;
+  align-items:flex-start;
+  gap:5px;
+  padding:2px 7px 3px;
+  position:relative;
+  z-index:2;
+}
+.ladder-side{
+  flex:0 0 33%;
+  max-width:150px;
+  min-width:84px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  background:var(--panel);
+  border:1px solid var(--panel-line);
+  border-radius:10px;
+  padding:4px 3px 3px;
+}
+.ladder-currency{
+  text-align:center;
+  font-family:'Anton','Noto Sans SC',sans-serif;
+  font-size:8px;
+  letter-spacing:1.5px;
+  color:var(--gold-bright);
+  opacity:.85;
+}
+.ladder-cols{display:flex;flex-direction:row;gap:3px;}
+.ladder-col{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.ladder-item{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Anton','Noto Sans SC',sans-serif;
+  font-size:8.5px;
+  letter-spacing:.2px;
+  padding:2.5px 1px;
+  border-radius:5px;
+  background:linear-gradient(155deg, #ffe066 0%, #f0c419 45%, #b5860f 100%);
+  border:1px solid rgba(255,224,102,0.6);
+  color:#3a2405;
+  font-weight:700;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 0 5px rgba(240,196,25,0.3);
+  transition:all .4s ease;
+}
+.ladder-item.crossed{
+  color:var(--crossed);
+  text-decoration:line-through;
+  background:rgba(0,0,0,0.3);
+  border-color:rgba(255,255,255,0.04);
+  box-shadow:none;
+  opacity:.6;
+  transform:scale(.94);
+}
+
+.header-center{
+  flex:1;
+  text-align:center;
+  min-width:0;
+}
+.header-center .eyebrow{
+  font-size:8px;
+  letter-spacing:2.5px;
+  color:var(--gold);
+  opacity:.8;
+  text-transform:uppercase;
+}
+.header-center h1{
+  font-family:'Anton', 'Noto Sans SC', sans-serif;
+  font-size:clamp(17px,5.6vw,26px);
+  margin:1px 0 0;
+  letter-spacing:1px;
+  background:linear-gradient(180deg,var(--gold-bright),var(--gold-deep));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 0 24px rgba(240,196,25,0.25);
+}
+.header-center .sub{
+  font-size:9px;
+  color:var(--ink-dim);
+  margin-top:1px;
+  letter-spacing:.5px;
+}
+
+/* ---------- LUCKY SLOT ---------- */
+.lucky-wrap{
+  text-align:center;
+  margin:0;
+  min-height:0;
+  max-height:0;
+  overflow:hidden;
+  position:relative;
+  z-index:2;
+  transition:max-height .3s ease;
+}
+.lucky-wrap.active{
+  margin:1px 0 1px;
+  max-height:60px;
+}
+.lucky-wrap .label{
+  font-size:9px;
+  color:var(--ink-dim);
+  letter-spacing:2px;
+  margin-bottom:3px;
+  display:none;
+}
+.lucky-wrap.active .label{display:block;}
+.lucky-box{
+  display:none;
+  width:54px;height:58px;
+  margin:0 auto;
+  border-radius:8px 8px 5px 5px;
+  position:relative;
+  background:linear-gradient(165deg,var(--envelope) 0%, var(--envelope-dark) 100%);
+  align-items:center;justify-content:center;
+  overflow:visible;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -5px 8px rgba(0,0,0,0.35),
+    0 0 0 2px var(--gold), 0 8px 18px rgba(240,196,25,.4);
+  animation:luckyPulse 2.4s ease-in-out infinite;
+}
+.lucky-box::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:44%;
+  border-radius:8px 8px 0 0;
+  background:linear-gradient(160deg,var(--gold-bright),var(--gold-deep));
+  clip-path:polygon(0 0,100% 0,50% 78%);
+  opacity:.95;
+}
+.lucky-box::after{
+  content:'';
+  position:absolute;
+  top:36%;left:50%;
+  width:26%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle, var(--gold-bright), var(--gold-deep) 70%);
+  box-shadow:0 0 6px rgba(0,0,0,.4);
+}
+.lucky-num{
+  position:relative;z-index:2;
+  margin-top:20%;
+  font-family:'Anton',sans-serif;
+  font-size:18px;color:var(--gold-bright);
+  text-shadow:0 2px 4px rgba(0,0,0,.5);
+}
+.lucky-ribbon{
+  position:absolute;
+  top:-7px;right:-9px;
+  background:linear-gradient(160deg,var(--gold-bright),var(--gold-deep));
+  color:#3a2405;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.5px;
+  padding:2px 5px;
+  border-radius:5px;
+  box-shadow:0 2px 5px rgba(0,0,0,.4);
+  transform:rotate(14deg);
+  z-index:3;
+}
+.lucky-wrap.active .lucky-box{display:flex;}
+@keyframes luckyPulse{
+  0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -5px 8px rgba(0,0,0,0.35), 0 0 0 2px var(--gold),0 8px 18px rgba(240,196,25,.35);}
+  50%{box-shadow:inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -5px 8px rgba(0,0,0,0.35), 0 0 0 6px rgba(240,196,25,.18),0 8px 26px rgba(240,196,25,.6);}
+}
+
+/* ---------- BOX GRID ---------- */
+.stage{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  padding:1px 8px 4px;
+  position:relative;
+  z-index:2;
+  overflow-y:auto;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.stage::-webkit-scrollbar{
+  display:none;
+  width:0;
+  height:0;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:7px 7px;
+  max-width:400px;
+  margin:0 auto;
+  width:100%;
+  padding:1px 2px;
+}
+@media (min-width:520px){
+  .grid{ max-width:560px; gap:14px; }
+}
+
+/* 红包造型信封 */
+.box{
+  position:relative;
+  width:100%;
+  aspect-ratio:1/0.92;
+  border:none;
+  border-radius:9px 9px 5px 5px;
+  background:linear-gradient(165deg,var(--envelope) 0%, var(--envelope-dark) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.2),
+    inset 0 -6px 10px rgba(0,0,0,0.35),
+    0 5px 10px rgba(0,0,0,0.5);
+  color:var(--gold-bright);
+  font-family:'Anton',sans-serif;
+  font-size:clamp(12px,4vw,16px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:transform .15s ease, filter .3s ease;
+  overflow:hidden;
+}
+/* 信封翻盖 */
+.box::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:46%;
+  background:linear-gradient(160deg,var(--gold-bright),var(--gold-deep));
+  clip-path:polygon(0 0,100% 0,50% 78%);
+  opacity:.95;
+}
+/* 金色印章圆点 */
+.box::after{
+  content:'';
+  position:absolute;
+  top:38%;left:50%;
+  width:22%;
+  aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle, var(--gold-bright), var(--gold-deep) 70%);
+  box-shadow:0 0 6px rgba(0,0,0,.4);
+  z-index:0;
+}
+.box .num{
+  position:relative;z-index:2;
+  margin-top:22%;
+  text-shadow:0 2px 4px rgba(0,0,0,.5);
+}
+.box:active{transform:scale(.9);}
+.box.picked-lucky{
+  visibility:hidden;
+  pointer-events:none;
+}
+.box.opened{
+  background:linear-gradient(160deg,#232a4d,#171c38);
+  color:var(--ink-dim);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);
+  cursor:default;
+  filter:grayscale(.5);
+}
+.box.opened::before{opacity:.12;background:linear-gradient(160deg,#555,#333);}
+.box.opened::after{opacity:.15;}
+.box.opened .prize-val{
+  position:relative;z-index:2;margin-top:22%;
+  font-family:'Anton',sans-serif;
+  font-size:clamp(9px,3.4vw,13px);
+  color:#8f96bd;
+}
+.box.disabled{opacity:.35;pointer-events:none;filter:grayscale(.5);}
+.box.flip{animation:flipOpen .55s ease forwards;}
+@keyframes flipOpen{
+  0%{transform:rotateY(0);}
+  50%{transform:rotateY(90deg);}
+  100%{transform:rotateY(0);}
+}
+.box.pulse-select{animation:selectPulse .5s ease;}
+@keyframes selectPulse{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.15);box-shadow:0 0 0 8px rgba(240,196,25,.35),0 8px 16px rgba(0,0,0,.45);}
+  100%{transform:scale(1);}
+}
+
+/* ---------- STATUS BAR ---------- */
+.statusbar{
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:linear-gradient(180deg,var(--bg-deep) 60%, rgba(4,6,15,0));
+  padding:3px 14px 5px;
+  text-align:center;
+}
+.statusbar .pill{
+  display:inline-block;
+  max-width:100%;
+  padding:5px 14px;
+  border-radius:999px;
+  background:var(--panel);
+  border:1px solid var(--panel-line);
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:.5px;
+  color:var(--ink);
+}
+.statusbar .pill.urgent{
+  border-color:var(--red);
+  color:#ffd8d4;
+  animation:urgentGlow 1.2s ease-in-out infinite;
+}
+@keyframes urgentGlow{
+  0%,100%{box-shadow:0 0 0 rgba(230,60,51,0);}
+  50%{box-shadow:0 0 16px rgba(230,60,51,.55);}
+}
+
+/* ---------- OVERLAYS ---------- */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(2,3,10,0.86);
+  backdrop-filter:blur(3px);
+  display:none;
+  align-items:center;justify-content:center;
+  z-index:50;
+  padding:20px;
+}
+.overlay.show{display:flex;}
+
+/* 开场大幕 */
+#introOverlay{
+  z-index:100;
+  background:transparent;
+  backdrop-filter:none;
+  padding:0;
+}
+.curtain{
+  position:absolute;top:0;bottom:0;width:52%;
+  background:
+    repeating-linear-gradient(90deg, #7c0f0a 0 14px, #8f130d 14px 28px),
+    linear-gradient(180deg,#8f130d,#4a0906);
+  box-shadow:inset -20px 0 40px rgba(0,0,0,.5);
+  transition:transform 1s cubic-bezier(.7,0,.3,1);
+  z-index:1;
+}
+.curtain.left{left:0;border-radius:0 0 40% 0;}
+.curtain.right{right:0;transform:scaleX(-1);border-radius:0 0 40% 0;}
+.curtain-gold-trim{
+  position:absolute;top:0;bottom:0;width:10px;
+  background:linear-gradient(180deg,var(--gold-bright),var(--gold-deep));
+}
+.curtain.left .curtain-gold-trim{right:0;}
+.curtain.right .curtain-gold-trim{right:0;}
+#introOverlay.opening .curtain.left{transform:translateX(-105%);}
+#introOverlay.opening .curtain.right{transform:scaleX(-1) translateX(-105%);}
+.intro-content{
+  position:relative;z-index:2;
+  text-align:center;
+  color:var(--ink);
+  padding:0 20px;
+}
+.intro-content .eyebrow{
+  color:var(--gold);letter-spacing:5px;font-size:11px;text-transform:uppercase;
+}
+.intro-content h1{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(34px,10vw,54px);
+  margin:6px 0 2px;
+  background:linear-gradient(180deg,var(--gold-bright),var(--gold-deep));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 30px rgba(240,196,25,.4);
+}
+.intro-content .zh-deco{
+  font-family:'Ma Shan Zheng', cursive;
+  font-size:28px;color:var(--gold-bright);
+  opacity:.85;margin-bottom:6px;
+}
+.intro-content p{color:var(--ink-dim);font-size:13px;margin:6px 0 22px;}
+.start-btn{
+  font-family:'Anton',sans-serif;
+  font-size:20px;letter-spacing:2px;
+  padding:16px 42px;
+  border:none;border-radius:999px;
+  background:linear-gradient(160deg,var(--gold-bright),var(--gold-deep));
+  color:#1a1200;
+  box-shadow:0 8px 30px rgba(240,196,25,.5);
+  cursor:pointer;
+  animation:startPulse 1.8s ease-in-out infinite;
+}
+@keyframes startPulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+}
+
+/* reveal card */
+.reveal-card{
+  background:linear-gradient(165deg,#1a2350,#0b1030);
+  border:1px solid var(--panel-line);
+  border-radius:18px;
+  padding:24px 22px;
+  text-align:center;
+  max-width:280px;
+  width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  animation:popIn .35s cubic-bezier(.2,1.4,.4,1);
+}
+@keyframes popIn{
+  0%{transform:scale(.7);opacity:0;}
+  100%{transform:scale(1);opacity:1;}
+}
+.reveal-card .tag{font-size:12px;color:var(--ink-dim);letter-spacing:3px;}
+.reveal-card .amt{
+  font-family:'Anton',sans-serif;
+  font-size:38px;
+  margin:8px 0;
+  color:var(--gold-bright);
+  text-shadow:0 0 18px rgba(240,196,25,.4);
+}
+
+/* phone ring overlay */
+.ring-overlay{background:rgba(60,4,4,0.92);}
+.ring-overlay .phone{
+  font-size:60px;
+  animation:shake .35s infinite;
+  filter:drop-shadow(0 0 20px rgba(230,60,51,.8));
+}
+@keyframes shake{
+  0%,100%{transform:rotate(0deg);}
+  25%{transform:rotate(-14deg);}
+  75%{transform:rotate(14deg);}
+}
+.ring-overlay .ring-text{
+  font-family:'Anton',sans-serif;
+  font-size:20px;
+  letter-spacing:3px;
+  color:#ffdcd6;
+  margin-top:16px;
+  text-align:center;
+  animation:blink 0.9s steps(2) infinite;
+}
+@keyframes blink{50%{opacity:.2;}}
+.ring-flash{
+  position:fixed;inset:0;
+  background:var(--red);
+  opacity:0;
+  z-index:49;
+  pointer-events:none;
+}
+.ring-flash.flashing{animation:flashScreen .5s steps(2) infinite;}
+@keyframes flashScreen{0%,100%{opacity:0;}50%{opacity:.18;}}
+
+/* banker offer modal */
+.offer-card{
+  background:linear-gradient(165deg,#211407,#0c0803);
+  border:2px solid var(--gold);
+  border-radius:20px;
+  padding:26px 20px;
+  text-align:center;
+  max-width:320px;
+  width:100%;
+  box-shadow:0 0 60px rgba(240,196,25,.25), 0 20px 60px rgba(0,0,0,.7);
+  animation:popIn .4s cubic-bezier(.2,1.4,.4,1);
+}
+.offer-card .round-tag{
+  font-size:11px;
+  letter-spacing:3px;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+.offer-card h2{
+  font-family:'Anton',sans-serif;
+  font-size:18px;
+  margin:6px 0 2px;
+  color:var(--ink);
+  letter-spacing:1px;
+}
+.offer-card .offer-amt{
+  font-family:'Anton',sans-serif;
+  font-size:46px;
+  margin:12px 0;
+  color:var(--gold-bright);
+  text-shadow:0 0 24px rgba(240,196,25,.5);
+}
+.offer-btns{
+  display:flex;
+  gap:12px;
+  margin-top:16px;
+}
+.btn{
+  flex:1;
+  padding:15px 10px;
+  border:none;
+  border-radius:14px;
+  font-family:'Anton',sans-serif;
+  font-size:17px;
+  letter-spacing:1px;
+  cursor:pointer;
+  transition:transform .15s ease;
+}
+.btn:active{transform:scale(.94);}
+.btn-deal{
+  background:linear-gradient(160deg,var(--gold-bright),var(--gold-deep));
+  color:#1a1200;
+  box-shadow:0 6px 18px rgba(240,196,25,.4);
+}
+.btn-nodeal{
+  background:linear-gradient(160deg,#2a3160,#171c38);
+  color:var(--ink);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+/* finale */
+.finale-card{
+  background:linear-gradient(165deg,#1a2350,#0b1030);
+  border:1px solid var(--panel-line);
+  border-radius:20px;
+  padding:24px 20px;
+  text-align:center;
+  max-width:320px;
+  width:100%;
+}
+.finale-card h2{
+  font-family:'Anton',sans-serif;
+  font-size:20px;
+  color:var(--gold-bright);
+  margin-bottom:6px;
+}
+.finale-card p{color:var(--ink-dim);font-size:13px;margin-bottom:14px;}
+.finale-btns{display:flex;flex-direction:column;gap:12px;}
+.finale-btns .btn{padding:17px 10px;}
+
+.winner-card{
+  background:linear-gradient(165deg,#211407,#0c0803);
+  border:2px solid var(--gold);
+  border-radius:22px;
+  padding:30px 22px;
+  text-align:center;
+  max-width:320px;
+  width:100%;
+  box-shadow:0 0 80px rgba(240,196,25,.35);
+}
+.winner-card .eyebrow{color:var(--gold);letter-spacing:3px;font-size:12px;}
+.winner-card h2{
+  font-family:'Anton',sans-serif;
+  font-size:24px;
+  margin:8px 0 4px;
+  color:var(--ink);
+}
+.winner-card .final-amt{
+  font-family:'Anton',sans-serif;
+  font-size:52px;
+  color:var(--gold-bright);
+  text-shadow:0 0 30px rgba(240,196,25,.6);
+  margin:10px 0 16px;
+}
+.winner-card .btn{width:100%;}
+
+canvas#confetti{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:60;
+}
+
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="ambient" id="ambient"></div>
+<div class="ring-flash" id="ringFlash"></div>
+<canvas id="confetti"></canvas>
+
+<!-- 开场大幕 -->
+<div class="overlay show" id="introOverlay">
+  <div class="curtain left"><div class="curtain-gold-trim"></div></div>
+  <div class="curtain right"><div class="curtain-gold-trim"></div></div>
+  <div class="intro-content">
+    <div class="zh-deco">红运临门</div>
+    <div class="eyebrow">FAMILY SPECIAL EDITION</div>
+    <h1>一掷千金</h1>
+    <p>24 个红包 · 未知的命运 · 谁与银行家过招？</p>
+    <button class="start-btn" id="btnStart">开始表演 ▶</button>
+  </div>
+</div>
+
+<div class="top-row">
+  <div class="ladder-side" id="ladderLeftSide">
+    <div class="ladder-currency">RM</div>
+    <div class="ladder-cols">
+      <div class="ladder-col" id="ladderCol1"></div>
+      <div class="ladder-col" id="ladderCol2"></div>
+    </div>
+  </div>
+
+  <div class="header-center">
+    <div class="eyebrow">DEAL OR NO DEAL</div>
+    <h1>一掷千金</h1>
+    <div class="sub">红运临门 · 惊喜专场</div>
+    <div class="lucky-wrap" id="luckyWrap">
+      <div class="label">我的幸运红包</div>
+      <div class="lucky-box" id="luckyBoxDisplay">?</div>
+    </div>
+  </div>
+
+  <div class="ladder-side" id="ladderRightSide">
+    <div class="ladder-currency">RM</div>
+    <div class="ladder-cols">
+      <div class="ladder-col" id="ladderCol3"></div>
+      <div class="ladder-col" id="ladderCol4"></div>
+    </div>
+  </div>
+</div>
+
+<div class="statusbar">
+  <div class="pill" id="statusPill">请选择你的幸运红包 🧧</div>
+</div>
+
+<div class="stage">
+  <div class="grid" id="grid"></div>
+</div>
+
+
+<!-- 开箱结果小卡片 -->
+<div class="overlay" id="revealOverlay">
+  <div class="reveal-card">
+    <div class="tag">红包 <span id="revealNum"></span> 号 揭晓</div>
+    <div class="amt" id="revealAmt"></div>
+  </div>
+</div>
+
+<!-- 银行家来电 -->
+<div class="overlay ring-overlay" id="ringOverlay">
+  <div style="text-align:center;">
+    <div class="phone">☎️</div>
+    <div class="ring-text" id="ringText">银行家来电中...</div>
+  </div>
+</div>
+
+<!-- 银行家报价 -->
+<div class="overlay" id="offerOverlay">
+  <div class="offer-card">
+    <div class="round-tag" id="offerRoundTag">第一轮报价</div>
+    <h2>银行家说：</h2>
+    <div class="offer-amt" id="offerAmt">RM 0</div>
+    <div class="offer-btns">
+      <button class="btn btn-nodeal" id="btnNoDeal">NO DEAL</button>
+      <button class="btn btn-deal" id="btnDeal">DEAL</button>
+    </div>
+  </div>
+</div>
+
+<!-- 终局抉择 -->
+<div class="overlay" id="finaleOverlay">
+  <div class="finale-card">
+    <h2>命运抉择时刻</h2>
+    <p>只剩最后两个红包了。你要坚持自己的幸运红包，还是换成最后一个？</p>
+    <div class="finale-btns">
+      <button class="btn btn-deal" id="btnKeepLucky">打开我的幸运红包</button>
+      <button class="btn btn-nodeal" id="btnSwap">交换并打开最后一个</button>
+    </div>
+  </div>
+</div>
+
+<!-- 获胜结算 -->
+<div class="overlay" id="winOverlay">
+  <div class="winner-card">
+    <div class="eyebrow" id="winTag">恭喜成交</div>
+    <h2 id="winTitle">你赢得了</h2>
+    <div class="final-amt" id="winAmt">RM 0</div>
+    <button class="btn btn-deal" id="btnRestart">再玩一次</button>
+  </div>
+</div>
+
+<script>
+/* ============ 配置区：24 个红包，可自行修改数值与轮次 ============ */
+const CONFIG = {
+  currency: 'RM',
+  prizes: [
+    0.10, 0.50, 1, 5, 10, 20, 30, 50, 75, 100, 150, 200,
+    250, 300, 350, 400, 500, 600, 700, 750, 800, 900, 950, 1000
+  ], // 24 个奖金值，最高 RM 1,000：前12个低额密集（0.1~200），后12个逐步拉开差距（250~1000），越往后跳动越刺激
+  roundPlan: [6, 5, 4, 3, 2, 1, 1],          // 每一轮需要淘汰的红包数，总和 = 22（+1幸运红包 +1终局红包 = 24）
+  offerPercents: [0.15, 0.30, 0.45, 0.55, 0.65, 0.75, 0.90] // 各轮银行家出价占剩余平均值的比例
+};
+
+const CN_NUM = ['一','二','三','四','五','六','七','八','九','十'];
+
+/* ============ 状态 ============ */
+let boxes = [];
+let luckyBoxId = null;
+let currentRoundIndex = 0;
+let openedThisRound = 0;
+let gameEnded = false;
+let muted = false;
+
+/* ============ 音效模块：真实音效文件 + 极简合成滴答声 ============ */
+const SFX_SRC = {
+  select:   'audio/sfx-select.mp3',   // 选中红包
+  open:     'audio/sfx-open.mp3',     // 撕开红包
+  ring:     'audio/sfx-ring.mp3',     // 银行家来电铃声（循环）
+  deal:     'audio/sfx-deal.mp3',     // 成交
+  nodeal:   'audio/sfx-nodeal.mp3',   // 不成交
+  firework: 'audio/sfx-firework.mp3'  // 终局烟花
+};
+const sfxAssets = {};
+Object.keys(SFX_SRC).forEach(key=>{
+  const a = new Audio(SFX_SRC[key]);
+  a.preload = 'auto';
+  sfxAssets[key] = a;
+});
+
+let audioCtx = null;
+function ensureAudio(){
+  if(!audioCtx){
+    try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+  }
+  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  // 解锁 iOS/Safari 上的 <audio> 自动播放限制：静音播放一次后立即暂停
+  Object.values(sfxAssets).forEach(a=>{
+    a.play().then(()=>{ a.pause(); a.currentTime = 0; }).catch(()=>{});
+  });
+}
+function tone(freq, duration, type, gainVal, delay){
+  if(muted || !audioCtx) return;
+  gainVal = gainVal || 0.2; delay = delay || 0;
+  const t0 = audioCtx.currentTime + delay;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type || 'sine';
+  osc.frequency.setValueAtTime(freq, t0);
+  gain.gain.setValueAtTime(gainVal, t0);
+  gain.gain.exponentialRampToValueAtTime(0.001, t0 + duration);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(t0);
+  osc.stop(t0 + duration + 0.02);
+}
+function playSfx(key, volume){
+  if(muted) return null;
+  const base = sfxAssets[key];
+  if(!base) return null;
+  const node = base.cloneNode(); // 允许同一音效重叠播放
+  node.volume = volume!==undefined ? volume : 1;
+  node.play().catch(()=>{});
+  return node;
+}
+function sfxSelect(){ playSfx('select'); }
+function sfxOpen(){ playSfx('open'); }
+function sfxTick(){ tone(1100,0.03,'square',0.05,0); }
+function sfxDeal(){ playSfx('deal'); }
+function sfxNoDeal(){ playSfx('nodeal'); }
+function sfxFirework(){ playSfx('firework'); }
+
+let ringAudioNode = null;
+function startRingtone(){
+  if(muted) return;
+  ringAudioNode = sfxAssets.ring.cloneNode();
+  ringAudioNode.loop = true;
+  ringAudioNode.play().catch(()=>{});
+}
+function stopRingtone(){
+  if(ringAudioNode){ ringAudioNode.pause(); ringAudioNode.currentTime = 0; ringAudioNode = null; }
+}
+
+/* ============ 工具函数 ============ */
+function fmt(n){
+  let str;
+  if(Number.isInteger(n)){
+    str = Math.round(n).toLocaleString('en-MY');
+  } else {
+    str = n.toLocaleString('en-MY', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  return CONFIG.currency + ' ' + str;
+}
+function fmtShort(n){
+  // 奖金榜专用紧凑格式：数值较大时转为 K；小于1的用两位小数显示
+  if(n >= 10000){
+    const k = n/1000;
+    const kStr = Number.isInteger(k) ? String(k) : k.toFixed(1);
+    return kStr + 'K';
+  }
+  if(!Number.isInteger(n)){
+    return n.toFixed(2);
+  }
+  return n.toLocaleString('en-MY');
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function vibrate(pattern){
+  if(navigator.vibrate){ try{ navigator.vibrate(pattern); }catch(e){} }
+}
+function roundLabel(idx){
+  const isLast = idx === CONFIG.roundPlan.length - 1;
+  return isLast ? '终极报价' : `第${CN_NUM[idx]}轮报价`;
+}
+
+/* ============ 环境浮光粒子 ============ */
+function spawnAmbient(){
+  const ambient = document.getElementById('ambient');
+  const count = 18;
+  for(let i=0;i<count;i++){
+    const s = document.createElement('div');
+    s.className = 'spark';
+    s.style.left = Math.random()*100 + '%';
+    s.style.setProperty('--drift', (Math.random()*60-30)+'px');
+    const dur = 6 + Math.random()*8;
+    s.style.animationDuration = dur + 's';
+    s.style.animationDelay = (Math.random()*dur) + 's';
+    ambient.appendChild(s);
+  }
+}
+
+/* ============ 初始化 ============ */
+function initGame(){
+  gameEnded = false;
+  luckyBoxId = null;
+  currentRoundIndex = 0;
+  openedThisRound = 0;
+
+  const shuffled = shuffle(CONFIG.prizes);
+  boxes = shuffled.map((prize, idx) => ({
+    id: idx+1,
+    prize,
+    opened:false,
+    isLucky:false
+  }));
+
+  renderLadder();
+  renderGrid();
+  document.getElementById('luckyWrap').classList.remove('active');
+  setStatus('请选择你的幸运红包 🧧', false);
+  document.getElementById('winOverlay').classList.remove('show');
+}
+
+/* ============ 排行榜渲染 ============ */
+function renderLadder(){
+  const sorted = CONFIG.prizes.slice().sort((a,b)=>a-b);
+  const n = sorted.length;
+  const q = Math.ceil(n/4);
+  const parts = [
+    sorted.slice(0, q),
+    sorted.slice(q, q*2),
+    sorted.slice(q*2, q*3),
+    sorted.slice(q*3)
+  ];
+  const colIds = ['ladderCol1','ladderCol2','ladderCol3','ladderCol4'];
+
+  colIds.forEach((id, i)=>{
+    const el = document.getElementById(id);
+    el.innerHTML = '';
+    parts[i].forEach(v=>{
+      const d = document.createElement('div');
+      d.className = 'ladder-item';
+      d.dataset.value = v;
+      d.textContent = fmtShort(v);
+      el.appendChild(d);
+    });
+  });
+}
+function crossOutLadder(value){
+  document.querySelectorAll('.ladder-item').forEach(el=>{
+    if(Number(el.dataset.value) === value){
+      el.classList.add('crossed');
+    }
+  });
+}
+
+/* ============ 红包网格渲染 ============ */
+function renderGrid(){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  boxes.forEach(box=>{
+    const btn = document.createElement('button');
+    btn.className = 'box';
+    btn.dataset.id = box.id;
+    btn.innerHTML = `<span class="num">${box.id}</span>`;
+    btn.addEventListener('click', ()=>onBoxClick(box.id));
+    grid.appendChild(btn);
+  });
+}
+function getBoxEl(id){
+  return document.querySelector(`.box[data-id="${id}"]`);
+}
+
+/* ============ 状态栏 ============ */
+function setStatus(text, urgent){
+  const pill = document.getElementById('statusPill');
+  pill.textContent = text;
+  pill.classList.toggle('urgent', !!urgent);
+}
+
+/* ============ 点击红包 ============ */
+function onBoxClick(id){
+  if(gameEnded) return;
+  const box = boxes.find(b=>b.id===id);
+  if(!box || box.opened || box.isLucky) return;
+
+  if(luckyBoxId === null){
+    pickLucky(box);
+    return;
+  }
+  openBox(box);
+}
+
+/* ---- 选幸运红包 ---- */
+function pickLucky(box){
+  box.isLucky = true;
+  luckyBoxId = box.id;
+  sfxSelect();
+
+  const el = getBoxEl(box.id);
+  el.classList.add('pulse-select');
+
+  setTimeout(()=>{
+    el.classList.add('picked-lucky');
+    const luckyWrap = document.getElementById('luckyWrap');
+    const luckyDisplay = document.getElementById('luckyBoxDisplay');
+    luckyDisplay.innerHTML = `<span class="lucky-ribbon">LUCKY</span><span class="lucky-num">${box.id}</span>`;
+    luckyWrap.classList.add('active');
+
+    setStatus(`第一轮：请淘汰 ${CONFIG.roundPlan[0]} 个红包 🔥`, false);
+  }, 480);
+}
+
+/* ---- 打开红包 ---- */
+function openBox(box){
+  const el = getBoxEl(box.id);
+  el.classList.add('flip');
+  sfxOpen();
+  vibrate(15);
+
+  setTimeout(()=>{
+    box.opened = true;
+    el.classList.add('opened');
+    el.innerHTML = `<span class="prize-val">${fmt(box.prize)}</span>`;
+    crossOutLadder(box.prize);
+    showRevealCard(box);
+  }, 280);
+}
+
+function showRevealCard(box){
+  const overlay = document.getElementById('revealOverlay');
+  document.getElementById('revealNum').textContent = box.id;
+  document.getElementById('revealAmt').textContent = fmt(box.prize);
+  overlay.classList.add('show');
+
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    afterBoxOpened();
+  }, 1100);
+}
+
+function afterBoxOpened(){
+  openedThisRound++;
+  const needed = CONFIG.roundPlan[currentRoundIndex];
+  const remainingToOpen = needed - openedThisRound;
+
+  if(remainingToOpen > 0){
+    setStatus(`继续淘汰，还剩 ${remainingToOpen} 个红包 🔥`, remainingToOpen<=1);
+  } else {
+    setStatus('银行家正在计算报价...', true);
+    setTimeout(()=> triggerBankerOffer(currentRoundIndex), 800);
+  }
+}
+
+/* ============ 银行家出价 ============ */
+function getUnopenedBoxes(){
+  return boxes.filter(b=>!b.opened);
+}
+
+function triggerBankerOffer(roundIdx){
+  const unopened = getUnopenedBoxes();
+  const avg = unopened.reduce((s,b)=>s+b.prize,0) / unopened.length;
+  const offerAmount = Math.round(avg * CONFIG.offerPercents[roundIdx]);
+
+  showPhoneRing(()=>{
+    showOfferModal(roundIdx, offerAmount);
+  });
+}
+
+function showPhoneRing(callback){
+  const overlay = document.getElementById('ringOverlay');
+  const flash = document.getElementById('ringFlash');
+  overlay.classList.add('show');
+  flash.classList.add('flashing');
+  vibrate([200,100,200,100,200]);
+  startRingtone();
+
+  const texts = ['银行家来电中...', '电话接通了...', '银行家正在思考...'];
+  let i=0;
+  const textEl = document.getElementById('ringText');
+  const interval = setInterval(()=>{
+    i = (i+1) % texts.length;
+    textEl.textContent = texts[i];
+  }, 700);
+
+  setTimeout(()=>{
+    clearInterval(interval);
+    stopRingtone();
+    overlay.classList.remove('show');
+    flash.classList.remove('flashing');
+    callback();
+  }, 2400);
+}
+
+function showOfferModal(roundIdx, amount){
+  const overlay = document.getElementById('offerOverlay');
+  document.getElementById('offerRoundTag').textContent = roundLabel(roundIdx);
+  const amtEl = document.getElementById('offerAmt');
+  overlay.classList.add('show');
+  countUpTo(amtEl, amount, 900);
+
+  const btnDeal = document.getElementById('btnDeal');
+  const btnNoDeal = document.getElementById('btnNoDeal');
+
+  const dealHandler = ()=>{
+    overlay.classList.remove('show');
+    cleanup();
+    sfxDeal();
+    endGame(true, amount, roundLabel(roundIdx));
+  };
+  const noDealHandler = ()=>{
+    overlay.classList.remove('show');
+    cleanup();
+    sfxNoDeal();
+    proceedAfterNoDeal(roundIdx);
+  };
+  function cleanup(){
+    btnDeal.removeEventListener('click', dealHandler);
+    btnNoDeal.removeEventListener('click', noDealHandler);
+  }
+  btnDeal.addEventListener('click', dealHandler);
+  btnNoDeal.addEventListener('click', noDealHandler);
+}
+
+function countUpTo(el, target, duration){
+  const start = 0;
+  const startTime = performance.now();
+  const isIntTarget = Number.isInteger(target);
+  let lastTick = 0;
+  function tick(now){
+    const p = Math.min(1, (now-startTime)/duration);
+    let val = start + (target-start)*p;
+    if(isIntTarget) val = Math.round(val);
+    el.textContent = fmt(val);
+    if(now - lastTick > 60){ sfxTick(); lastTick = now; }
+    if(p<1) requestAnimationFrame(tick);
+    else el.textContent = fmt(target);
+  }
+  requestAnimationFrame(tick);
+}
+
+function proceedAfterNoDeal(roundIdx){
+  if(roundIdx < CONFIG.roundPlan.length - 1){
+    currentRoundIndex = roundIdx + 1;
+    openedThisRound = 0;
+    const needed = CONFIG.roundPlan[currentRoundIndex];
+    setStatus(`第${CN_NUM[currentRoundIndex]}轮：请淘汰 ${needed} 个红包 🔥`, false);
+  } else {
+    showFinaleChoice();
+  }
+}
+
+/* ============ 终局 ============ */
+function showFinaleChoice(){
+  setStatus('决定命运的时刻到了...', true);
+  const overlay = document.getElementById('finaleOverlay');
+  overlay.classList.add('show');
+
+  const btnKeep = document.getElementById('btnKeepLucky');
+  const btnSwap = document.getElementById('btnSwap');
+
+  const keepHandler = ()=>{
+    overlay.classList.remove('show');
+    cleanup();
+    finalizeGame(luckyBoxId);
+  };
+  const swapHandler = ()=>{
+    overlay.classList.remove('show');
+    cleanup();
+    const lastBox = boxes.find(b=>!b.opened && b.id!==luckyBoxId);
+    finalizeGame(lastBox.id);
+  };
+  function cleanup(){
+    btnKeep.removeEventListener('click', keepHandler);
+    btnSwap.removeEventListener('click', swapHandler);
+  }
+  btnKeep.addEventListener('click', keepHandler);
+  btnSwap.addEventListener('click', swapHandler);
+}
+
+function finalizeGame(boxId){
+  const box = boxes.find(b=>b.id===boxId);
+  const el = getBoxEl(boxId);
+  if(el){
+    el.classList.remove('picked-lucky');
+    el.classList.add('flip');
+  }
+  sfxOpen();
+  setTimeout(()=>{
+    endGame(false, box.prize, '你的最终红包');
+  }, 500);
+}
+
+/* ============ 结算 ============ */
+function endGame(dealAccepted, amount){
+  gameEnded = true;
+  setStatus(dealAccepted ? '已成交！' : '揭晓最终结果！', false);
+
+  const overlay = document.getElementById('winOverlay');
+  document.getElementById('winTag').textContent = dealAccepted ? '恭喜成交 DEAL!' : '最终揭晓';
+  document.getElementById('winTitle').textContent = dealAccepted ? '银行家支付给你' : '你最终赢得';
+  const amtEl = document.getElementById('winAmt');
+  overlay.classList.add('show');
+  countUpTo(amtEl, amount, 1200);
+
+  launchConfetti();
+  sfxFirework();
+  vibrate([100,50,100,50,300]);
+}
+
+document.getElementById('btnRestart').addEventListener('click', ()=>{
+  document.getElementById('winOverlay').classList.remove('show');
+  initGame();
+});
+
+
+
+
+/* ============ 开场大幕 ============ */
+document.getElementById('btnStart').addEventListener('click', function(){
+  ensureAudio();
+  sfxSelect();
+  const intro = document.getElementById('introOverlay');
+  intro.classList.add('opening');
+  setTimeout(()=>{
+    intro.classList.remove('show');
+  }, 1050);
+});
+
+/* ============ 彩纸特效 ============ */
+const confettiCanvas = document.getElementById('confetti');
+const ctx = confettiCanvas.getContext('2d');
+let confettiParticles = [];
+let confettiAnimId = null;
+
+function resizeCanvas(){
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function launchConfetti(){
+  const colors = ['#f0c419','#e63c33','#ffe066','#ffffff','#c99a12'];
+  confettiParticles = [];
+  const count = 160;
+  for(let i=0;i<count;i++){
+    confettiParticles.push({
+      x: Math.random()*confettiCanvas.width,
+      y: -20 - Math.random()*confettiCanvas.height*0.5,
+      w: 6+Math.random()*6,
+      h: 8+Math.random()*10,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      speed: 2+Math.random()*3,
+      drift: (Math.random()-0.5)*2,
+      rotation: Math.random()*360,
+      rotSpeed: (Math.random()-0.5)*10
+    });
+  }
+  const startTime = performance.now();
+  function frame(now){
+    ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    let stillAlive = false;
+    confettiParticles.forEach(p=>{
+      p.y += p.speed;
+      p.x += p.drift;
+      p.rotation += p.rotSpeed;
+      if(p.y < confettiCanvas.height + 20) stillAlive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation*Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if(stillAlive && now-startTime < 6000){
+      confettiAnimId = requestAnimationFrame(frame);
+    } else {
+      ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+    }
+  }
+  if(confettiAnimId) cancelAnimationFrame(confettiAnimId);
+  confettiAnimId = requestAnimationFrame(frame);
+}
+
+/* ============ 启动 ============ */
+spawnAmbient();
+initGame();
+</script>
+</body>
+</html>
