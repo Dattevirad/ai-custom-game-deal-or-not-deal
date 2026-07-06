@@ -102,54 +102,67 @@ body::before{
 }
 .ladder-cols{display:flex;flex-direction:row;gap:3px;}
 .ladder-col{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
-/* 1. 锁定盒子高度，取消动态字体限制 */
 .ladder-item {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  height: 27px;              /* 锁定固定高度，防止被撑开 */
+  gap: 3px;
+  height: 26px;              /* 锁定固定高度，防止被撑开 */
   padding: 0 4px;            /* 调整内边距，让内容居中 */
-  border-radius: 5px;
-  /* 下面保留你原本的背景和视觉属性 */
-  background: linear-gradient(155deg, #ffe066 0%, #f0c419 45%, #b5860f 100%);
-  border: 1px solid rgba(255,224,102,0.6);
-  color: #3a2405;
-  font-weight: 700;
-  -webkit-text-stroke: 0.3px #fff;
-  text-shadow: 0 0 1px #fff, 0.5px 0 0 #fff, -0.5px 0 0 #fff, 0 0.5px 0 #fff, 0 -0.5px 0 #fff;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 0 5px rgba(240,196,25,0.3);
-  transition: all .4s ease;
+  border-radius: 6px;
+  /* 提高对比度：改为更实色的深红底 + 更亮的金色描边，数字在深色背景上更突出 */
+  background: linear-gradient(180deg, rgba(124,26,19,0.65), rgba(20,4,2,0.72));
+  border: 1.5px solid rgba(240,196,25,0.55);
+  color: var(--gold-bright);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 0 4px rgba(240,196,25,0.15);
+  transition: background .35s ease, border-color .35s ease, opacity .35s ease;
 }
 
-/* 2. 修改单位 (RM) 的大小 */
+/* 2. 单位 (RM) 用暗淡小字，弱化次要信息；改用center对齐后需要line-height:1让文字块高度贴合，
+   避免因为字体行高不同导致的视觉偏移 */
 .ladder-item .li-cur {
-  font-size: 10px;           /* 稍微放大一点 */
-  letter-spacing: 0;
-  opacity: .72;
+  font-family:'Noto Sans SC', sans-serif;
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: .2px;
+  opacity: .75;
   font-weight: 700;
+  color: var(--ink-dim);
 }
 
-/* 3. 修改数字的大小 (重点) */
+/* 3. 数字改用 Anton 展示字体，笔画更挺括粗壮，不再需要描边就能清晰易读。
+   Anton 与 Noto Sans SC 的字体基线并不一致，之前用 baseline 对齐会让 RM 和数字看起来错位，
+   改成 center 对齐 + line-height:1 后两者视觉中心线一致，不再有违和感 */
 .ladder-item .li-num {
+  font-family:'Anton', sans-serif;
   font-variant-numeric: tabular-nums;
-  font-size: 14px;           /* 这里是你想要的放大效果，可以改成 14px 或 16px */
+  font-size: 15px;
+  line-height: 1;
+  letter-spacing: .3px;
   white-space: nowrap;
+  color: var(--gold-bright);
+  text-shadow: 0 1px 3px rgba(0,0,0,.6);
 }
 
-/* 4. 保持原来变灰的样式逻辑不变 */
+/* 4. 已淘汰金额：整体淡出+划线，不再做缩放跳动，过渡更平顺 */
 .ladder-item.crossed {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: none;
+  opacity: .42;
+}
+.ladder-item.crossed .li-num{
   color: var(--crossed);
   text-decoration: line-through;
-  background: rgba(0,0,0,0.3);
-  border-color: rgba(255,255,255,0.04);
-  box-shadow: none;
-  opacity: .6;
-  transform: scale(.94);
-  -webkit-text-stroke: 0;
   text-shadow: none;
 }
-.ladder-item.crossed .li-cur{ opacity:.5; }
+.ladder-item.crossed .li-cur{ opacity:.4; }
+@keyframes crossFlash{
+  0%{background:rgba(230,60,51,.35); border-color:rgba(230,60,51,.55);}
+  100%{background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.05);}
+}
+.ladder-item.crossed.flash{ animation:crossFlash .6s ease forwards; }
+/* 淘汰瞬间闪一下红色再淡出，一次性动画，闪完即结束，不会像之前的box-shadow循环那样持续占用性能 */
 
 .header-center{
   flex:1;
@@ -632,20 +645,35 @@ body::before{
   60%{transform:scale(1.15);}
   100%{transform:scale(1);}
 }
+.reveal-status{
+  position:relative;z-index:2;
+  display:inline-block;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:2px;
+  padding:3px 14px;
+  margin-bottom:8px;
+  border-radius:999px;
+  color:#ffe9e6;
+  background:linear-gradient(160deg,var(--red),var(--red-deep));
+  box-shadow:0 2px 12px rgba(230,60,51,.5);
+}
 .reveal-tier-badge{
   position:relative;z-index:2;
   display:inline-block;
   font-family:'Anton',sans-serif;
-  font-size:15px;
-  letter-spacing:3px;
+  font-size:14px;
+  letter-spacing:2px;
   padding:4px 16px;
   margin-bottom:8px;
   border-radius:999px;
-  color:#2a0704;
-  background:linear-gradient(160deg,var(--gold-bright),var(--red));
-  box-shadow:0 0 22px rgba(230,60,51,.6), 0 0 10px rgba(240,196,25,.6);
+  color:#fff2f0;
+  background:linear-gradient(160deg,var(--red),var(--red-deep));
+  box-shadow:0 0 20px rgba(230,60,51,.65), inset 0 1px 0 rgba(255,255,255,.2);
   animation:badgeShake .5s ease-in-out infinite;
 }
+/* 说明：淘汰红包不代表玩家中奖，因此这里改用警示性的红色配色 + "痛失大奖"文案，
+   并且不再放彩纸礼花特效，避免玩家误以为这是自己刚刚赢到的钱 */
 @keyframes badgeShake{
   0%,100%{transform:rotate(-2deg) scale(1);}
   50%{transform:rotate(2deg) scale(1.05);}
@@ -971,6 +999,61 @@ canvas#confetti{
 }
 
 .hidden{display:none !important;}
+
+/* ---------- 回合公告：屏幕正中央的醒目提示 ---------- */
+.round-banner{
+  position:fixed;
+  top:44%;left:50%;
+  transform:translate(-50%,-50%) scale(.75);
+  z-index:40;
+  text-align:center;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .35s ease, transform .4s cubic-bezier(.2,1.4,.4,1);
+}
+.round-banner.show{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+.round-banner .rb-tag{
+  display:inline-block;
+  font-family:'Anton',sans-serif;
+  font-size:14px;
+  letter-spacing:4px;
+  padding:5px 20px;
+  border-radius:999px;
+  color:#2a0704;
+  background:linear-gradient(160deg,var(--gold-bright),var(--gold-deep));
+  box-shadow:0 6px 22px rgba(240,196,25,.55);
+  margin-bottom:12px;
+}
+.round-banner .rb-main{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px 10px;
+  /* 加深背景不透明度，并加一圈金色描边，确保文字在任何棋盘背景前都清晰可读 */
+  background:rgba(6,2,1,.92);
+  padding:14px 26px;
+  border-radius:18px;
+  border:1.5px solid rgba(240,196,25,.55);
+  box-shadow:0 12px 40px rgba(0,0,0,.65), 0 0 34px rgba(240,196,25,.25);
+}
+.round-banner .rb-label{
+  font-family:'Noto Sans SC',sans-serif;
+  font-weight:900;
+  font-size:clamp(17px,4.6vw,22px);
+  color:var(--ink);
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
+}
+.round-banner .rb-num{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(42px,13vw,64px);
+  line-height:1;
+  color:var(--gold-bright);
+  text-shadow:0 0 22px rgba(240,196,25,.65), 0 4px 10px rgba(0,0,0,.6);
+}
 </style>
 </head>
 <body>
@@ -979,6 +1062,17 @@ canvas#confetti{
 <div class="ring-flash" id="ringFlash"></div>
 <div class="reveal-flash" id="revealFlash"></div>
 <canvas id="confetti"></canvas>
+
+<!-- 回合公告：每回合开始时在屏幕正中央醒目提示，几秒后自动淡出 -->
+<div class="round-banner" id="roundBanner">
+  <div class="rb-tag" id="rbTag">第一轮</div>
+  <div class="rb-main">
+    <span class="rb-label">请淘汰</span>
+    <span class="rb-num" id="rbNum">6</span>
+    <span class="rb-label">个红包</span>
+  </div>
+</div>
+
 
 <!-- 开场大幕 -->
 <div class="overlay show" id="introOverlay">
@@ -1033,8 +1127,9 @@ canvas#confetti{
   <div class="reveal-card" id="revealCard">
     <div class="reveal-rays" aria-hidden="true"></div>
     <div class="reveal-sparkles" id="revealSparkles" aria-hidden="true"></div>
-    <div class="reveal-tier-badge" id="revealBadge" style="display:none;">大奖 JACKPOT 🧧</div>
-    <div class="tag">红包 <span id="revealNum"></span> 号 揭晓</div>
+    <div class="reveal-status">红包已淘汰 🚫</div>
+    <div class="reveal-tier-badge" id="revealBadge" style="display:none;">💔 痛失大奖</div>
+    <div class="tag">红包 <span id="revealNum"></span> 号 原本价值</div>
     <div class="amt" id="revealAmt"></div>
   </div>
 </div>
@@ -1268,6 +1363,19 @@ function roundLabel(idx){
   return isLast ? '终极报价' : `第${CN_NUM[idx]}轮报价`;
 }
 
+/* ============ 回合公告 ============ */
+let roundBannerTimer = null;
+function showRoundBanner(tag, needed){
+  const el = document.getElementById('roundBanner');
+  document.getElementById('rbTag').textContent = tag;
+  document.getElementById('rbNum').textContent = needed;
+  el.classList.remove('show');
+  void el.offsetWidth; // 强制重新触发动画
+  el.classList.add('show');
+  if(roundBannerTimer) clearTimeout(roundBannerTimer);
+  roundBannerTimer = setTimeout(()=> el.classList.remove('show'), 2600); // 停留时间从1.7秒延长到2.6秒，给玩家足够时间看清
+}
+
 /* ============ 环境浮光粒子 ============ */
 function spawnAmbient(){
   const ambient = document.getElementById('ambient');
@@ -1336,7 +1444,8 @@ function renderLadder(){
 function crossOutLadder(value){
   document.querySelectorAll('.ladder-item').forEach(el=>{
     if(Number(el.dataset.value) === value){
-      el.classList.add('crossed');
+      el.classList.add('crossed', 'flash');
+      setTimeout(()=> el.classList.remove('flash'), 650);
     }
   });
 }
@@ -1397,6 +1506,7 @@ function pickLucky(box){
     luckyWrap.classList.add('active');
 
     setStatus(`第一轮：请淘汰 ${CONFIG.roundPlan[0]} 个红包 🔥`, false);
+    showRoundBanner('第一轮', CONFIG.roundPlan[0]);
     isProcessing = false; // 幸运红包动画结束，解锁
   }, 480);
 }
@@ -1494,7 +1604,8 @@ function showRevealCard(box){
   flash.classList.add('flash-once');
 
   vibrate(isJackpot ? [40,30,40,30,120] : [25]);
-  launchConfetti(isJackpot ? 90 : 40, 1400, window.innerHeight*0.35);
+  // 注意：这里不再放彩纸礼花特效——礼花代表"恭喜获得"，而淘汰红包对玩家来说其实是失去了这笔奖金，
+  // 放礼花会让人误以为自己刚刚赢到了这笔钱。礼花效果只保留给结算画面(endGame)真正的中奖时刻。
 
   setTimeout(()=>{
     overlay.classList.remove('show');
@@ -1622,6 +1733,7 @@ function proceedAfterNoDeal(roundIdx){
     boxesClickable = true; // 新一轮开始，重新允许点击红包
     const needed = CONFIG.roundPlan[currentRoundIndex];
     setStatus(`第${CN_NUM[currentRoundIndex]}轮：请淘汰 ${needed} 个红包 🔥`, false);
+    showRoundBanner(`第${CN_NUM[currentRoundIndex]}轮`, needed);
   } else {
     boxesClickable = false; // 进入终局：只能通过"坚持/交换"弹窗决定，不允许再直接点红包
     showFinaleChoice();
