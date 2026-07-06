@@ -410,30 +410,34 @@ body::before{
   position:sticky;
   top:0;
   z-index:5;
-  background:linear-gradient(180deg,var(--bg-deep) 60%, rgba(4,6,15,0));
-  padding:3px 14px 5px;
+  background:linear-gradient(180deg,var(--bg-deep) 75%, rgba(4,6,15,0));
+  padding:4px 14px 9px;
   text-align:center;
 }
 .statusbar .pill{
   display:inline-block;
   max-width:100%;
-  padding:5px 14px;
+  padding:8px 20px;
   border-radius:999px;
-  background:var(--panel);
-  border:1px solid var(--panel-line);
-  font-size:11.5px;
-  font-weight:700;
+  /* 原来接近透明的浅金底(0.055透明度)太容易被忽略，改成和奖金榜一致的实色深红金边，
+     视觉分量明显提升，同时呼应整体配色 */
+  background:linear-gradient(160deg, rgba(124,26,19,.8), rgba(20,4,2,.85));
+  border:1.5px solid rgba(240,196,25,.55);
+  font-size:13.5px;
+  font-weight:800;
   letter-spacing:.5px;
   color:var(--ink);
+  box-shadow:0 4px 18px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.1);
 }
 .statusbar .pill.urgent{
   border-color:var(--red);
-  color:#ffd8d4;
+  background:linear-gradient(160deg, rgba(230,60,51,.6), rgba(90,10,8,.9));
+  color:#fff2f0;
   animation:urgentGlow 1.2s ease-in-out infinite;
 }
 @keyframes urgentGlow{
-  0%,100%{box-shadow:0 0 0 rgba(230,60,51,0);}
-  50%{box-shadow:0 0 16px rgba(230,60,51,.55);}
+  0%,100%{box-shadow:0 4px 18px rgba(0,0,0,.4), 0 0 0 rgba(230,60,51,0);}
+  50%{box-shadow:0 4px 18px rgba(0,0,0,.4), 0 0 18px rgba(230,60,51,.65);}
 }
 
 /* ---------- OVERLAYS ---------- */
