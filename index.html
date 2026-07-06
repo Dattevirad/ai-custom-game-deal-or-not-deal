@@ -1405,7 +1405,7 @@ function openBox(box){
     el.innerHTML = `<span class="prize-val">${fmt(box.prize)}</span>`;
     crossOutLadder(box.prize);
     showRevealCard(box);
-  }, 1000);
+  }, 280);
 }
 
 function revealBoxContents(box){
@@ -1418,7 +1418,7 @@ function revealBoxContents(box){
     box.opened = true;
     el.classList.add('opened');
     el.innerHTML = `<span class="prize-val">${fmt(box.prize)}</span>`;
-  }, 1000);
+  }, 280);
 }
 
 function spawnRevealSparkles(container, intensity){
@@ -1491,7 +1491,7 @@ function showRevealCard(box){
     overlay.classList.remove('show');
     isProcessing = false; // 揭晓卡片收起，解锁，允许点击下一个红包
     afterBoxOpened();
-  }, 1300);
+  }, 5000);
 }
 
 function afterBoxOpened(){
