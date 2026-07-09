@@ -1338,7 +1338,7 @@ function fmtShort(n){
     const kStr = Number.isInteger(k) ? String(k) : k.toFixed(1);
     return kStr + 'K';
 
-  elif(n >= 1000000){
+  if(n >= 1000000){
     const M = n/1000000;
     const MStr = Number.isInteger(M) ? String(M) : M.toFixed(1);
     return MStr + 'M';
