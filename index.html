@@ -1332,7 +1332,12 @@ function fmt(n){
   return CONFIG.currency + ' ' + str;
 }
 function fmtShort(n){
-  // 奖金榜专用紧凑格式：数值较大时转为 K；小于1的用两位小数显示
+  // 奖金榜专用紧凑格式：数值较大时转为 K 或 M；小于1的用两位小数显示
+  if(n >= 1000000){
+    const m = n/1000000;
+    const mStr = Number.isInteger(m) ? String(m) : m.toFixed(1);
+    return mStr + 'M';
+  }
   if(n >= 10000){
     const k = n/1000;
     const kStr = Number.isInteger(k) ? String(k) : k.toFixed(1);
